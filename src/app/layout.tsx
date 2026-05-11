@@ -15,11 +15,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
-          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700&f[]=satoshi@700,500,400&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,400&f[]=satoshi@900,700,500,400&display=swap"
           rel="stylesheet"
         />
-        <title>AIBO Shop — Adopt Your AI Pet on Mantle</title>
-        <meta name="description" content="Mint your first AIBO — the AI-powered pet that farms yield, trades, and battles on Mantle blockchain." />
+        <title>AIBO SHOP — The Official Pet Adoption Marketplace</title>
+        <meta name="description" content="Adopt your AI companion on Mantle. High-performance, yield-farming, battle-ready pets." />
       </head>
       <body>
         <WagmiProvider config={wagmiConfig}>

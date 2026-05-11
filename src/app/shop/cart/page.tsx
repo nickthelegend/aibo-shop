@@ -9,6 +9,7 @@ import RarityBadge from '@/components/RarityBadge';
 import WalletButton from '@/components/WalletButton';
 import { useCart } from '@/lib/cartStore';
 import { useAccount } from 'wagmi';
+import { clsx } from 'clsx';
 
 export default function CartPage() {
   const { items, removeItem, clearCart, totalMNT, itemCount } = useCart();

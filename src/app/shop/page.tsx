@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal, Zap, TrendingUp, Star } from 'lucide-react';
+import { Search, SlidersHorizontal, Zap, TrendingUp, Star, Shield, ArrowRight } from 'lucide-react';
 import PetCard from '@/components/PetCard';
 import RarityBadge from '@/components/RarityBadge';
 import PetAvatar from '@/components/PetAvatar';
 import WalletButton from '@/components/WalletButton';
 import { PETS, CATEGORIES, Category } from '@/lib/mockPets';
+import { clsx } from 'clsx';
 
 export default function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
@@ -15,7 +16,6 @@ export default function ShopPage() {
 
   const filteredPets = useMemo(() => {
     let pets = [...PETS];
-    
     if (selectedCategory !== 'All') {
       if (selectedCategory === 'Rare') {
         pets = pets.filter(p => p.rarity === 'Rare' || p.rarity === 'Epic');
@@ -25,7 +25,6 @@ export default function ShopPage() {
         pets = pets.filter(p => p.category === selectedCategory);
       }
     }
-
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       pets = pets.filter(p => 
@@ -34,7 +33,6 @@ export default function ShopPage() {
         p.category.toLowerCase().includes(q)
       );
     }
-
     switch(sortBy) {
       case 'price-low': return pets.sort((a,b) => a.priceMNT - b.priceMNT);
       case 'price-high': return pets.sort((a,b) => b.priceMNT - a.priceMNT);
@@ -48,138 +46,135 @@ export default function ShopPage() {
   }, [selectedCategory, sortBy, searchQuery]);
 
   const featuredPets = PETS.filter(p => p.isFeatured).slice(0, 4);
-  const legendaryPets = PETS.filter(p => p.rarity === 'Legendary');
 
   return (
     <div className="bg-white">
-      {/* SECTION 1: HERO BANNER */}
-      <section className="relative overflow-hidden grid-bg border-b-[2.5px] border-black min-h-[500px] flex items-center">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
-          {/* LEFT CONTENT */}
-          <div className="lg:col-span-7 z-10">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 bg-primary px-3 py-1 border-2 border-black rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 brutal-shadow-sm">
-                🐾 AIBO SHOP · SEASON 1
-              </div>
-              
-              <h1 className="text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.9] uppercase mb-8">
-                ADOPT YOUR<br />
-                FIRST AIBO<br />
-                <span className="bg-primary px-4 py-1 rounded-[4px]">TODAY</span>
-              </h1>
-              
-              <p className="text-gray-500 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-medium">
-                Mint AI-powered pets on Mantle. They trade, farm yield, and battle — all on-chain.
-              </p>
-              
-              <div className="flex flex-wrap gap-4 mb-12">
-                <a href="#browse" className="btn btn-primary btn-lg">
-                  🐾 Browse Pets
-                </a>
-                <WalletButton />
-              </div>
-              
-              <div className="flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-                <div className="flex items-center gap-2">
-                  <span className="text-black">847</span> Pets Minted
-                </div>
-                <div className="w-[1px] h-4 bg-gray-200" />
-                <div className="flex items-center gap-2">
-                  <span className="text-black">12,847</span> Battles
-                </div>
-                <div className="w-[1px] h-4 bg-gray-200" />
-                <div className="flex items-center gap-2">
-                  <span className="text-black">340%</span> Avg APY
-                </div>
-              </div>
-            </motion.div>
-          </div>
+      {/* SECTION 1: HERO BANNER (LANDING PAGE INSPIRED) */}
+      <section className="relative overflow-hidden grid-bg min-h-[90vh] flex flex-col items-center justify-center pt-24 pb-16">
+        {/* DECORATIVE SVG SHAPES */}
+        <div className="absolute top-20 left-10 opacity-20 hidden md:block">
+          <svg width="100" height="100" viewBox="0 0 60 60"><path d="M30 0 L33 27 L60 30 L33 33 L30 60 L27 33 L0 30 L27 27 Z" fill="currentColor" /></svg>
+        </div>
+        <div className="absolute bottom-40 right-20 opacity-30 animate-spin-slow hidden md:block">
+           <svg width="120" height="120" viewBox="0 0 100 100">
+             <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="#FF5C00" />
+           </svg>
+        </div>
 
-          {/* RIGHT VISUAL */}
-          <div className="lg:col-span-5 relative h-[400px] hidden lg:block">
-             <motion.div 
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full"
-               initial={{ scale: 0.8, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               transition={{ duration: 0.8, delay: 0.2 }}
-             >
-                {/* NOVA */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                  <PetAvatar pet={PETS.find(p => p.id === 'nova')!} size="lg" />
-                </div>
-                {/* SPARK */}
-                <div className="absolute top-10 left-0 z-10">
-                  <PetAvatar pet={PETS.find(p => p.id === 'spark')!} size="md" />
-                </div>
-                {/* LUNA */}
-                <div className="absolute bottom-10 right-0 z-10">
-                  <PetAvatar pet={PETS.find(p => p.id === 'luna')!} size="md" />
-                </div>
-             </motion.div>
-          </div>
+        <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-3 bg-white border-[2.5px] border-black px-5 py-2 rounded-full mb-10 brutal-shadow-sm">
+              <span className="flex h-2 w-2 rounded-full bg-green-500 animate-ping" />
+              <span className="font-display text-[11px] uppercase tracking-widest">AIBO MARKETPLACE · SEASON 01</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-8xl lg:text-9xl font-display uppercase mb-8 leading-[0.85] tracking-tighter">
+              ADOPT YOUR <br />
+              <span className="bg-primary px-4 py-1 rounded-lg border-2 border-black inline-block -rotate-1 mt-2">FIRST</span> AIBO
+            </h1>
+            
+            <p className="text-gray-600 text-lg md:text-2xl max-w-2xl mx-auto mb-12 leading-relaxed font-bold uppercase tracking-tight">
+              Mint high-performance AI pets on Mantle. <br className="hidden md:block" />
+              Battle, earn, and evolve your companion on-chain.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
+              <a href="#browse" className="btn btn-primary btn-lg w-full sm:w-auto">
+                🐾 Browse Marketplace
+              </a>
+              <WalletButton />
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto pt-10 border-t-2 border-black/10">
+               {[
+                 { label: 'Total Minted', val: '847', icon: '🐾' },
+                 { label: 'Active Battles', val: '12,847', icon: '⚔️' },
+                 { label: 'Floor Price', val: '4.5 MNT', icon: '💎' },
+                 { label: 'Avg Yield', val: '340%', icon: '📈' },
+               ].map(stat => (
+                 <div key={stat.label} className="flex flex-col">
+                   <span className="text-3xl font-display mb-1">{stat.val}</span>
+                   <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{stat.icon} {stat.label}</span>
+                 </div>
+               ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* FLOATING AVATARS BACKGROUND */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+           <div className="absolute top-[20%] left-[5%] float">
+             <PetAvatar pet={PETS[0]} size="sm" animated={false} showGlow={false} />
+           </div>
+           <div className="absolute top-[60%] right-[10%] float" style={{ animationDelay: '1s' }}>
+             <PetAvatar pet={PETS[1]} size="sm" animated={false} showGlow={false} />
+           </div>
         </div>
       </section>
 
-      {/* SECTION 2: LIVE TICKER */}
-      <div className="bg-primary border-b-[2.5px] border-black py-3 overflow-hidden select-none">
-        <div className="flex whitespace-nowrap ticker-track">
+      {/* LIVE TICKER STRIP */}
+      <div className="ticker-container bg-charcoal py-4">
+        <div className="ticker-track">
           {[...Array(4)].map((_, i) => (
-            <span key={i} className="text-black text-sm font-bold uppercase mx-4">
-              🔥 SPARK just minted! ◆ 3 NOVA remaining ◆ ⭐ NOVA: 15 MNT ◆ 🌙 LUNA: 8 MNT ◆ 47 AIBOs minted today ◆ 
-            </span>
+            <div key={i} className="flex items-center gap-12 px-6">
+              <span className="text-primary font-display text-sm uppercase tracking-widest flex items-center gap-3">
+                 <Zap size={14} fill="currentColor" /> SPARK JUST MINTED
+              </span>
+              <span className="text-white font-display text-sm uppercase tracking-widest">⭐ NOVA: 15.0 MNT</span>
+              <span className="text-pink font-display text-sm uppercase tracking-widest">🔥 LUNA TRENDING</span>
+              <span className="text-white font-display text-sm uppercase tracking-widest flex items-center gap-3">
+                 <ArrowRight size={14} /> EXPLORE ALL PETS
+              </span>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* SECTION 3: BROWSE */}
+      {/* BROWSE SECTION */}
       <section id="browse" className="bg-[#FAFAFA] py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
-            <div>
-              <h2 className="text-4xl md:text-5xl uppercase mb-4 flex items-center gap-4">
-                <span className="w-12 h-12 bg-white border-2 border-black rounded-lg flex items-center justify-center brutal-shadow-sm">🛒</span>
-                Browse All Pets
-              </h2>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16">
+            <div className="max-w-xl">
+              <div className="badge badge-primary mb-4">Marketplace</div>
+              <h2 className="text-5xl md:text-6xl font-display uppercase mb-4 leading-none">Browse Collection</h2>
               <p className="text-gray-500 font-bold uppercase text-sm tracking-widest">
-                {filteredPets.length} AIBOs found matching your criteria
+                Discover {filteredPets.length} unique AI agents waiting for adoption
               </p>
             </div>
 
-            {/* FILTERS & SEARCH */}
             <div className="flex flex-col md:flex-row gap-4 items-center">
                <div className="relative w-full md:w-80">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                   <input 
                     type="text" 
-                    placeholder="Search by name, trait, or type..."
-                    className="input pl-12 h-12"
+                    placeholder="Search AIBOs..."
+                    className="input pl-12 h-14 w-full"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                </div>
-               
-               <div className="flex items-center gap-2 bg-white border-2 border-black p-1 rounded-[12px] brutal-shadow-sm w-full md:w-auto overflow-x-auto no-scrollbar">
+               <div className="flex bg-white border-[2.5px] border-black rounded-xl p-1 brutal-shadow-sm">
                   <select 
-                    className="bg-transparent border-none outline-none font-bold uppercase text-xs px-4 h-10 cursor-pointer"
+                    className="bg-transparent border-none outline-none font-display text-[10px] uppercase px-4 h-11 cursor-pointer"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
                   >
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low → High</option>
-                    <option value="price-high">Price: High → Low</option>
-                    <option value="rarity">Rarity</option>
-                    <option value="new">Newest</option>
+                    <option value="featured">Featured First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rarity">By Rarity</option>
+                    <option value="new">New Arrivals</option>
                   </select>
                </div>
             </div>
           </div>
 
-          {/* CATEGORY TABS */}
-          <div className="flex gap-3 mb-12 overflow-x-auto pb-4 no-scrollbar">
+          {/* CATEGORIES */}
+          <div className="flex gap-4 mb-16 overflow-x-auto pb-4 no-scrollbar">
             {CATEGORIES.map(cat => {
               const isActive = selectedCategory === cat.id;
               return (
@@ -187,35 +182,35 @@ export default function ShopPage() {
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={clsx(
-                    "flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black font-bold uppercase text-xs transition-all whitespace-nowrap",
+                    "flex items-center gap-3 px-8 py-4 rounded-full border-[2.5px] border-black font-display text-[10px] uppercase transition-all whitespace-nowrap",
                     isActive 
-                      ? "bg-black text-primary brutal-shadow-sm translate-y-[-2px]" 
-                      : "bg-white text-black brutal-shadow hover:translate-y-[-1px]"
+                      ? "bg-black text-primary brutal-shadow-sm -translate-y-1" 
+                      : "bg-white text-black brutal-shadow hover:-translate-y-0.5"
                   )}
                 >
-                  <span>{cat.emoji}</span>
+                  <span className="text-lg">{cat.emoji}</span>
                   {cat.label}
                 </button>
               );
             })}
           </div>
 
-          {/* PET GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {/* GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
             {filteredPets.length > 0 ? (
               filteredPets.map((pet, idx) => (
                 <PetCard key={pet.id} pet={pet} index={idx} />
               ))
             ) : (
-              <div className="col-span-full py-20 flex flex-col items-center justify-center text-center">
-                <span className="text-6xl mb-6">😔</span>
-                <h3 className="text-3xl uppercase mb-2">No AIBOs found</h3>
-                <p className="text-gray-500 mb-8">Try adjusting your search or filters.</p>
+              <div className="col-span-full py-32 flex flex-col items-center justify-center text-center">
+                <span className="text-8xl mb-8">🔍</span>
+                <h3 className="text-4xl font-display uppercase mb-4">No AIBOs found</h3>
+                <p className="text-gray-500 font-bold uppercase text-xs mb-10">Try a different search or category</p>
                 <button 
-                  onClick={() => { setSelectedCategory('All'); setSearchQuery(''); setSortBy('featured'); }}
+                  onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
                   className="btn btn-primary"
                 >
-                  Reset Filters
+                  Reset Filter
                 </button>
               </div>
             )}
@@ -223,65 +218,31 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* SECTION 4: FEATURED PETS CAROUSEL */}
-      <section className="bg-charcoal grid-bg-dark py-24 px-6 md:px-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl text-primary uppercase mb-12 flex items-center gap-4">
-             <Star className="text-primary" fill="currentColor" />
-             Featured This Week
-          </h2>
-          
-          <div className="flex gap-8 overflow-x-auto pb-12 no-scrollbar px-2 -mx-2">
-            {featuredPets.map((pet, idx) => (
-              <div key={pet.id} className="min-w-[300px] flex-shrink-0">
-                <PetCard pet={pet} index={idx} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5: EARLY ACCESS BANNER */}
-      <section className="bg-purple relative py-24 px-6 md:px-12 border-t-[2.5px] border-black overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-10">
-           <div className="w-full h-full grid-bg-yellow" />
-        </div>
-        
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-           <div>
-              <div className="inline-block bg-orange-500 text-white border-2 border-black rounded-full px-4 py-1 text-[10px] font-bold uppercase tracking-widest mb-6">
-                ⚡ LIMITED EARLY ACCESS
-              </div>
-              <h2 className="text-4xl md:text-6xl text-white uppercase mb-8 leading-none">
-                Only 10 Legendary<br />AIBOs Exist
-              </h2>
-              <p className="text-white/80 text-lg mb-10 max-w-md">
-                Once they&apos;re gone, they&apos;re gone forever. No re-mints. No second chances. The future is limited.
-              </p>
-              <button 
-                onClick={() => setSelectedCategory('Legendary')}
-                className="btn btn-primary btn-lg"
-              >
-                View Legendary Pets →
-              </button>
-           </div>
-           
-           <div className="relative h-[300px] flex items-center justify-center">
-              <div className="absolute left-0">
-                <PetAvatar pet={PETS.find(p => p.id === 'nova')!} size="lg" />
-              </div>
-              <div className="absolute right-0">
-                <PetAvatar pet={PETS.find(p => p.id === 'spark')!} size="lg" />
-              </div>
-              
-              <div className="absolute bottom-0 bg-white border-2 border-black rounded-full px-6 py-2 brutal-shadow-sm flex items-center gap-3">
-                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                 <span className="text-xs font-bold uppercase tracking-widest text-black">
-                   3 of 5 NOVA remaining
-                 </span>
-              </div>
-           </div>
-        </div>
+      {/* FEATURED BANNER */}
+      <section className="bg-purple py-24 border-y-[3px] border-black overflow-hidden relative">
+         <div className="absolute inset-0 grid-bg-colored opacity-10" />
+         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+            <div className="max-w-2xl">
+               <h2 className="text-5xl md:text-7xl text-white font-display uppercase mb-8 leading-none">
+                 Become a Legend <br /> in the Arena
+               </h2>
+               <p className="text-white/80 text-lg font-bold uppercase mb-12 tracking-tight">
+                 Your AIBO is more than an NFT. It&apos;s a high-frequency trading agent <br className="hidden md:block" />
+                 and battle-ready companion.
+               </p>
+               <button className="btn btn-primary btn-lg">
+                 Start Your Journey →
+               </button>
+            </div>
+            
+            <div className="relative group">
+               <div className="absolute -inset-10 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/40 transition-all duration-700" />
+               <PetAvatar pet={PETS.find(p => p.id === 'nova')!} size="xl" />
+               <div className="absolute -bottom-6 -right-6 bg-white border-[2.5px] border-black p-4 rounded-2xl brutal-shadow-sm rotate-6">
+                  <span className="font-display text-xs uppercase tracking-tighter">NOVA THE STAR CHILD</span>
+               </div>
+            </div>
+         </div>
       </section>
     </div>
   );

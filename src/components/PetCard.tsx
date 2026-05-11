@@ -7,7 +7,7 @@ import PetAvatar from './PetAvatar';
 import { useCart } from '@/lib/cartStore';
 import { Pet } from '@/lib/mockPets';
 import { clsx } from 'clsx';
-import { Star } from 'lucide-react';
+import { Star, Shield, Zap, Info } from 'lucide-react';
 
 interface PetCardProps {
   pet: Pet;
@@ -19,8 +19,9 @@ const PetCard: React.FC<PetCardProps> = ({ pet, index = 0 }) => {
   const [justAdded, setJustAdded] = useState(false);
   
   const isInCart = items.some(i => i.pet.id === pet.id);
+  const progressPercent = (pet.available / pet.totalSupply) * 100;
 
-  const handleMintClick = (e: React.MouseEvent) => {
+  const handleAction = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isInCart) {
@@ -30,113 +31,114 @@ const PetCard: React.FC<PetCardProps> = ({ pet, index = 0 }) => {
     }
   };
 
-  const progressPercent = (pet.available / pet.totalSupply) * 100;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.07, duration: 0.4 }}
-      className={clsx(
-        "card group relative",
-        {
-          "card-legendary": pet.rarity === 'Legendary',
-          "card-epic": pet.rarity === 'Epic',
-          "card-rare": pet.rarity === 'Rare',
-        }
-      )}
+      transition={{ delay: index * 0.05, duration: 0.4 }}
+      className="card group relative"
     >
-      {/* Decorative star for legendaries */}
-      {pet.rarity === 'Legendary' && (
-        <div className="absolute top-2 right-2 z-10 text-primary drop-shadow-[0_0_8px_rgba(255,225,124,0.6)]">
-          <Star size={24} fill="currentColor" strokeWidth={1} />
-        </div>
-      )}
+      {/* HEADER STRIP */}
+      <div className="absolute top-0 left-0 right-0 h-[6px]" style={{ backgroundColor: pet.color }} />
 
       {/* TOP - Pet Preview Area */}
       <div 
-        className="relative h-[200px] flex items-center justify-center p-4"
-        style={{ backgroundColor: pet.bgColor }}
+        className="relative h-[240px] flex items-center justify-center p-6 overflow-hidden"
+        style={{ backgroundColor: `${pet.bgColor}CC` }}
       >
-        <PetAvatar pet={pet} size="md" animated={true} />
+        {/* Decorative Grid on Card */}
+        <div className="absolute inset-0 grid-bg opacity-10" />
         
-        <div className="absolute top-3 left-3">
+        <PetAvatar pet={pet} size="md" animated={true} showGlow={true} />
+        
+        <div className="absolute top-6 left-6">
           <RarityBadge rarity={pet.rarity} size="sm" />
         </div>
 
-        {pet.isEarlyAccess && (
-          <div className="absolute top-3 right-3 badge badge-early text-[10px]">
-            ⚡ EARLY ACCESS
-          </div>
+        {pet.rarity === 'Legendary' && (
+           <div className="absolute top-6 right-6 text-primary drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+             <Star size={20} fill="currentColor" />
+           </div>
         )}
 
-        {/* Available Supply Bar */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/20 to-transparent">
-          <div className="flex justify-between items-center mb-1">
-             <span className="text-[10px] font-bold text-black uppercase">
-               {pet.available}/{pet.totalSupply} remaining
-             </span>
-          </div>
-          <div className="h-1.5 w-full bg-white/50 border border-black rounded-full overflow-hidden">
-            <div 
-              className="h-full"
-              style={{ 
-                width: `${progressPercent}%`, 
-                backgroundColor: pet.color 
-              }}
-            />
-          </div>
+        {/* SUPPLY BAR */}
+        <div className="absolute bottom-4 left-6 right-6">
+           <div className="flex justify-between items-center mb-1.5">
+              <span className="text-[9px] font-bold text-black uppercase tracking-[0.1em]">
+                 Supply Remaining: {pet.available}/{pet.totalSupply}
+              </span>
+              <span className="text-[9px] font-bold text-black uppercase">
+                 {Math.round(progressPercent)}%
+              </span>
+           </div>
+           <div className="h-2 w-full bg-black/10 border border-black rounded-full overflow-hidden">
+              <div 
+                className="h-full transition-all duration-1000 ease-out"
+                style={{ 
+                  width: `${progressPercent}%`, 
+                  backgroundColor: pet.color 
+                }}
+              />
+           </div>
         </div>
       </div>
 
       {/* BOTTOM - Info Area */}
-      <div className="p-4">
-        <h3 className="text-xl mb-0.5 uppercase">{pet.name}</h3>
-        <p className="text-[10px] text-gray-500 font-bold uppercase mb-3">
-          {pet.category}
-        </p>
-
-        {/* Stats Row */}
-        <div className="flex gap-2 mb-4">
-          {pet.stats.slice(0, 2).map((stat, i) => (
-            <div key={i} className="flex items-center gap-1 bg-charcoal text-white text-[10px] px-2 py-0.5 rounded-full border border-black">
-              <span>{stat.icon}</span>
-              <span className="font-bold">{stat.value}</span>
-            </div>
-          ))}
+      <div className="p-6 bg-white flex flex-col h-[200px]">
+        <div className="flex justify-between items-start mb-4">
+           <div>
+              <h3 className="text-2xl font-display uppercase leading-none mb-1">{pet.name}</h3>
+              <div className="flex items-center gap-2">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{pet.category}</span>
+                 <div className="w-1 h-1 bg-gray-200 rounded-full" />
+                 <span className="text-[10px] font-bold text-gray-400 uppercase">GEN {pet.generation}</span>
+              </div>
+           </div>
+           <div className="text-right">
+              <div className="font-display text-xl leading-none">{pet.priceMNT} MNT</div>
+              <div className="text-[10px] text-gray-400 font-bold uppercase mt-1">≈ ${pet.priceUSD}</div>
+           </div>
         </div>
 
-        {/* Price Row */}
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
-          <div>
-            <div className="font-display text-lg leading-none">
-              {pet.priceMNT} MNT
-            </div>
-            <div className="text-[10px] text-gray-400 font-bold">
-              ≈ {pet.priceUSD} USD
-            </div>
-          </div>
+        {/* STATS PREVIEW */}
+        <div className="grid grid-cols-2 gap-2 mb-6">
+           {pet.stats.slice(0, 2).map((stat, i) => (
+             <div key={i} className="flex items-center justify-between p-2 bg-gray-50 border border-black/5 rounded-lg group-hover:border-black/20 transition-colors">
+                <span className="text-[10px] flex items-center gap-1">
+                   {stat.icon} <span className="text-gray-400 uppercase font-bold tracking-tighter">{stat.name.slice(0, 3)}</span>
+                </span>
+                <span className="text-[10px] font-bold">{stat.value}</span>
+             </div>
+           ))}
+        </div>
 
-          <button 
-            onClick={handleMintClick}
-            disabled={isInCart}
-            className={clsx(
-              "btn btn-sm",
-              isInCart ? "bg-green-500 text-white border-black cursor-default" : "btn-primary"
-            )}
-          >
-            {justAdded ? "ADDED! ✓" : isInCart ? "✓ IN CART" : "MINT →"}
-          </button>
+        {/* ACTIONS */}
+        <div className="mt-auto flex items-center gap-3">
+           <Link 
+             href={`/shop/pet/${pet.id}`}
+             className="flex-1 btn btn-secondary btn-sm h-11"
+           >
+              Details
+           </Link>
+           <button 
+             onClick={handleAction}
+             disabled={isInCart}
+             className={clsx(
+               "flex-[1.5] btn btn-sm h-11",
+               isInCart ? "bg-green-500 text-white border-black cursor-default" : "btn-primary"
+             )}
+           >
+             {justAdded ? "ADDED! ✓" : isInCart ? "IN CART ✓" : "MINT NOW →"}
+           </button>
         </div>
       </div>
 
-      {/* Entire card link */}
+      {/* HIDDEN LINK OVERLAY FOR CARDS */}
       <Link 
         href={`/shop/pet/${pet.id}`}
-        className="absolute inset-0 z-0 opacity-0"
-      >
-        View {pet.name}
-      </Link>
+        className="absolute inset-0 z-0 opacity-0 pointer-events-none md:pointer-events-auto"
+        tabIndex={-1}
+      />
     </motion.div>
   );
 };
