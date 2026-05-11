@@ -1,118 +1,579 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  /* Colors */
-  --color-primary: #FFE17C;
-  --color-charcoal: #171E19;
-  --color-sage: #B7C6C2;
-  --color-purple: #5B30F6;
-  --color-pink: #FF6FD8;
-  --color-green: #1A9E3F;
-  --color-orange: #FF5C00;
-  --color-red: #FF3B3B;
+/* ══════════════════════════════════════════
+   FONTS — loaded in layout.tsx <head>
+   Cabinet Grotesk (headings) + Satoshi (body)
+   ══════════════════════════════════════════ */
 
-  /* Fonts */
-  --font-display: "Cabinet Grotesk", "Satoshi", sans-serif;
-  --font-body: "Satoshi", "Inter", sans-serif;
+/* ══════════════════════════════════════════
+   CSS VARIABLES — BYOOOOOB PALETTE
+   ══════════════════════════════════════════ */
+:root {
+  /* Core */
+  --cream:    #F0EEEA;
+  --black:    #000000;
+  --white:    #FFFFFF;
+  --yellow:   #FFD700;
+  --yellow2:  #FFE17C;
 
-  /* Shadows */
-  --shadow-brutal: 4px 4px 0px #000;
-  --shadow-brutal-lg: 6px 6px 0px #000;
-  --shadow-brutal-xl: 10px 10px 0px #000;
-  --shadow-brutal-yellow: 6px 6px 0px #FFE17C;
+  /* Section colors (matching Byooooob sections) */
+  --pink:     #FF6FD8;
+  --purple:   #5B30F6;
+  --green:    #2DB551;
+  --orange:   #FF5C00;
+  --red:      #E83333;
+
+  /* Text */
+  --text-dark: #1A1A1A;
+  --text-dim:  #666666;
+  --text-sage: #B7C6C2;
 }
 
-@layer base {
-  *, *::before, *::after { box-sizing: border-box; }
+/* ══════════════════════════════════════════
+   BASE RESET
+   ══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: #FFFFFF;
-    color: #000000;
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-  }
+html { scroll-behavior: smooth; }
 
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    margin: 0;
-    letter-spacing: -0.02em;
-  }
+body {
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-@layer components {
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(0,0,0,0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,0,0,0.07) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+/* ══════════════════════════════════════════
+   BACKGROUND PATTERNS
+   ══════════════════════════════════════════ */
 
-  .grid-bg-dark {
-    background-color: var(--color-charcoal);
-    background-image:
-      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  /* Buttons */
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-[2.5px] border-black font-display text-[13px] uppercase tracking-wider cursor-pointer transition-all px-8 py-3.5 shadow-brutal;
-    font-family: var(--font-display);
-  }
-
-  .btn:hover {
-    transform: translateY(-3px);
-    @apply shadow-brutal-lg;
-  }
-
-  .btn:active {
-    transform: translateY(1px);
-  }
-
-  .btn-primary { @apply bg-primary text-black; }
-  .btn-secondary { @apply bg-white text-black; }
-
-  /* Cards */
-  .card {
-    @apply bg-white border-[2.5px] border-black rounded-[24px] shadow-brutal overflow-hidden transition-all;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-    @apply shadow-brutal-xl;
-  }
-
-  /* Badges */
-  .badge {
-    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full border-[1.5px] border-black font-display text-[10px] uppercase tracking-widest bg-white;
-  }
-
-  .badge-primary { @apply bg-primary; }
+/* Cream + black grid (hero, default sections) */
+.grid-cream {
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-@layer utilities {
-  .ticker-track { 
-    display: flex;
-    width: max-content;
-    animation: ticker-left 30s linear infinite; 
-  }
-
-  @keyframes ticker-left {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  .animate-spin-slow {
-    animation: spin-slow 12s linear infinite;
-  }
-
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+/* White + black grid */
+.grid-white {
+  background-color: #FFFFFF;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
+
+/* Pink + purple grid (like Byooooob's pink process section) */
+.grid-pink {
+  background-color: var(--pink);
+  background-image:
+    linear-gradient(rgba(91,48,246,0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,48,246,0.25) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Purple + white lines (like Byooooob's portfolio section) */
+.grid-purple {
+  background-color: var(--purple);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Green + darker green grid (footer top zone) */
+.grid-green {
+  background-color: var(--green);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Purple diagonal lines (like Byooooob testimonials section) */
+.diagonal-purple {
+  background-color: var(--purple);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 20px,
+    rgba(255,255,255,0.06) 20px,
+    rgba(255,255,255,0.06) 21px
+  );
+}
+
+/* ══════════════════════════════════════════
+   TYPOGRAPHY
+   ══════════════════════════════════════════ */
+.font-display {
+  font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+  font-weight: 800;
+}
+
+/* Massive hero heading (byooooob-style stacked huge text) */
+.hero-heading {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+
+/* Section heading (large but not hero-scale) */
+.section-heading {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+
+/* ══════════════════════════════════════════
+   BRUTAL BORDERS & SHADOWS
+   ══════════════════════════════════════════ */
+.brutal-border   { border: 2.5px solid var(--black); }
+.brutal-shadow   { box-shadow: 4px 4px 0px var(--black); }
+.brutal-shadow-lg  { box-shadow: 6px 6px 0px var(--black); }
+.brutal-shadow-xl  { box-shadow: 10px 10px 0px var(--black); }
+.brutal-shadow-yellow { box-shadow: 6px 6px 0px var(--yellow); }
+.brutal-shadow-white  { box-shadow: 6px 6px 0px #FFF; }
+
+/* ══════════════════════════════════════════
+   BYOOOOOB-STYLE BUTTONS
+   ══════════════════════════════════════════ */
+
+/* PRIMARY: white pill with black border + hard shadow + yellow inner badge */
+.btn-byoo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  color: var(--black);
+  border: 2.5px solid var(--black);
+  box-shadow: 4px 4px 0px var(--black);
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+}
+.btn-byoo:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+.btn-byoo:active { transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--black); }
+
+/* The yellow inner badge (like "IN 2 MINS") */
+.btn-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--yellow);
+  color: var(--black);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* SECONDARY: yellow pill */
+.btn-yellow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow);
+  color: var(--black);
+  border: 2.5px solid var(--black);
+  box-shadow: 4px 4px 0px var(--black);
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+}
+.btn-yellow:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+.btn-yellow:active { transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--black); }
+
+/* DARK button (charcoal bg) */
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--black);
+  color: var(--yellow);
+  border: 2.5px solid var(--black);
+  box-shadow: 4px 4px 0px var(--yellow);
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-decoration: none;
+}
+.btn-dark:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--yellow); }
+
+/* ══════════════════════════════════════════
+   CARDS
+   ══════════════════════════════════════════ */
+.card-byoo {
+  background: var(--white);
+  border: 2.5px solid var(--black);
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 var(--black);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+.card-byoo:hover {
+  transform: translate(-3px,-3px);
+  box-shadow: 8px 8px 0 var(--black);
+}
+
+/* Colored section cards (like red/green "Who is this for?") */
+.card-orange { background: var(--orange); border: 2.5px solid var(--black); border-radius: 20px; overflow: hidden; }
+.card-green  { background: var(--green);  border: 2.5px solid var(--black); border-radius: 20px; overflow: hidden; }
+.card-purple { background: var(--purple); border: 2.5px solid var(--black); border-radius: 16px; overflow: hidden; }
+
+/* ══════════════════════════════════════════
+   RARITY BADGES (pill chips)
+   ══════════════════════════════════════════ */
+.badge-byoo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 2.5px solid var(--black);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.badge-legendary { background: var(--yellow); color: var(--black); }
+.badge-epic      { background: var(--pink);   color: var(--black); }
+.badge-rare      { background: var(--purple); color: var(--white); }
+.badge-common    { background: #C8C8C8;        color: var(--black); }
+.badge-early     { background: var(--orange); color: var(--white); }
+
+/* ══════════════════════════════════════════
+   PERSON / PET CARDS (floating polaroids like Byooooob)
+   ══════════════════════════════════════════ */
+.pet-polaroid {
+  border: 2.5px solid var(--black);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 5px 5px 0 var(--black);
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+  position: absolute;
+}
+.pet-polaroid-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  height: 120px;
+}
+.pet-polaroid-label {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 10px;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════
+   INPUTS
+   ══════════════════════════════════════════ */
+.input-byoo {
+  background: var(--white);
+  border: 2.5px solid var(--black);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--black);
+  outline: none;
+  width: 100%;
+  transition: box-shadow 0.15s ease;
+  box-shadow: 3px 3px 0 var(--black);
+}
+.input-byoo:focus { box-shadow: 5px 5px 0 var(--black); }
+.input-byoo::placeholder { color: #999; }
+
+/* ══════════════════════════════════════════
+   SCROLLING TICKER (like Byooooob's purple scroller)
+   ══════════════════════════════════════════ */
+@keyframes ticker-left  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes ticker-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 2.5px solid var(--black);
+  border-bottom: 2.5px solid var(--black);
+}
+.ticker-track-l { display: flex; width: max-content; animation: ticker-left  28s linear infinite; }
+.ticker-track-r { display: flex; width: max-content; animation: ticker-right 28s linear infinite; }
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 0;
+  white-space: nowrap;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-right: 32px;
+}
+
+/* ══════════════════════════════════════════
+   STARBURST SVG SHAPE (Byooooob decorative)
+   ══════════════════════════════════════════ */
+.starburst {
+  display: inline-block;
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2%  35%, 39% 35%
+  );
+}
+
+/* ══════════════════════════════════════════
+   PROCESS CARD (Pink section checklist)
+   ══════════════════════════════════════════ */
+.process-card {
+  background: var(--cream);
+  border: 2.5px solid var(--black);
+  border-radius: 24px;
+  box-shadow: 8px 8px 0 var(--black);
+  padding: 32px;
+  position: relative;
+}
+.process-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--black);
+  border-radius: 12px;
+  padding: 14px 18px;
+  background: var(--white);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+.process-step-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--purple);
+  border: 2px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   PORTFOLIO LIST ROW (Purple section)
+   ══════════════════════════════════════════ */
+.portfolio-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1.5px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: 6px;
+}
+.portfolio-row:hover {
+  background: rgba(255,255,255,0.08);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.portfolio-row-name {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+.portfolio-row-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.portfolio-tag {
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: 0.06em;
+}
+
+/* ══════════════════════════════════════════
+   TESTIMONIAL SLABS (Byooooob style)
+   ══════════════════════════════════════════ */
+.testimonial-slab {
+  background: #F0EEEA;
+  border: 2.5px solid var(--black);
+  border-radius: 16px;
+  box-shadow: 5px 5px 0 var(--black);
+  padding: 28px 32px;
+  min-width: 360px;
+  max-width: 400px;
+  flex-shrink: 0;
+  position: relative;
+}
+.testimonial-slab-left  { background-image: radial-gradient(circle at 20px 20px, rgba(0,0,0,0.04) 2px, transparent 2px); background-size: 20px 20px; }
+.testimonial-slab-right { background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 24px 24px; }
+
+/* Circular spinning stamp badge */
+.stamp-badge {
+  position: absolute;
+  bottom: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2.5px solid var(--black);
+  background: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 0 var(--black);
+  font-size: 1.5rem;
+  animation: spin-slow 8s linear infinite;
+}
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════
+   FAQ ACCORDION (Byooooob white clean style)
+   ══════════════════════════════════════════ */
+.faq-item {
+  border-bottom: 2px solid rgba(0,0,0,0.12);
+  padding: 24px 0;
+}
+.faq-question {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--black);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.faq-answer {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.7;
+  margin-top: 16px;
+  max-width: 600px;
+}
+
+/* ══════════════════════════════════════════
+   FOOTER WAVE (Green → Yellow, Byooooob style)
+   ══════════════════════════════════════════ */
+.wave-divider {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+/* ══════════════════════════════════════════
+   STAT BAR
+   ══════════════════════════════════════════ */
+.stat-track { height: 8px; background: rgba(0,0,0,0.1); border: 2px solid var(--black); border-radius: 999px; overflow: hidden; }
+.stat-fill  { height: 100%; border-radius: 999px; background: var(--yellow); transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+
+/* ══════════════════════════════════════════
+   PET ANIMATIONS
+   ══════════════════════════════════════════ */
+@keyframes float-a { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)} }
+@keyframes float-b { 0%,100%{transform:translateY(-6px) rotate(3deg)} 50%{transform:translateY(6px) rotate(-1deg)} }
+@keyframes float-c { 0%,100%{transform:translateY(4px) rotate(-4deg)} 50%{transform:translateY(-10px) rotate(2deg)} }
+@keyframes bounce-pet { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+@keyframes hatch { 0%{transform:scale(0) rotate(-15deg);opacity:0} 60%{transform:scale(1.2) rotate(5deg);opacity:1} 80%{transform:scale(0.93) rotate(-2deg)} 100%{transform:scale(1) rotate(0)} }
+@keyframes confetti-drop { 0%{transform:translateY(-40px) rotate(0);opacity:1} 100%{transform:translateY(160px) rotate(720deg);opacity:0} }
+
+.float-a { animation: float-a 3.5s ease-in-out infinite; }
+.float-b { animation: float-b 4.2s ease-in-out infinite; }
+.float-c { animation: float-c 2.8s ease-in-out infinite; }
+.bounce-pet { animation: bounce-pet 2s ease-in-out infinite; }
+.hatch { animation: hatch 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+/* ══════════════════════════════════════════
+   CART DRAWER
+   ══════════════════════════════════════════ */
+.cart-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;backdrop-filter:blur(3px); }
+.cart-panel { position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100vw;background:var(--white);border-left:3px solid var(--black);box-shadow:-8px 0 0 var(--black);z-index:201;display:flex;flex-direction:column; }
+
+/* ══════════════════════════════════════════
+   UTILITY MISC
+   ══════════════════════════════════════════ */
+.rotate-neg-8 { transform: rotate(-8deg); }
+.rotate-neg-4 { transform: rotate(-4deg); }
+.rotate-pos-4 { transform: rotate(4deg); }
+.rotate-pos-8 { transform: rotate(8deg); }
+
+/* Yellow cursor arrow decoration (Byooooob signature) */
+.cursor-deco {
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid var(--yellow);
+  transform: rotate(-30deg);
+  filter: drop-shadow(2px 2px 0 var(--black));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--black); border-radius: 3px; }
