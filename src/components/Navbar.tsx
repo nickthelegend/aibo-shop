@@ -8,12 +8,10 @@ import { usePathname } from 'next/navigation';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WalletButton from './WalletButton';
-import CartDrawer from './CartDrawer';
 import { useCart } from '@/lib/cartStore';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const { itemCount } = useCart();
   const pathname = usePathname();
 
@@ -83,15 +81,16 @@ export default function Navbar() {
 
         {/* Right actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {/* Cart button */}
-          <button
-            onClick={() => setCartOpen(true)}
+          {/* Cart button - now a Link to /shop/cart */}
+          <Link
+            href="/shop/cart"
             style={{
               position: 'relative', width: 42, height: 42, borderRadius: '50%',
               background: '#FFF', border: '2.5px solid #000',
               boxShadow: '3px 3px 0 #000', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'transform 0.12s ease',
+              textDecoration: 'none', color: '#000',
             }}
             onMouseEnter={e => (e.currentTarget.style.transform = 'translate(-2px,-2px)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'translate(0,0)')}
@@ -107,7 +106,7 @@ export default function Navbar() {
                 fontSize: '0.65rem', color: '#000',
               }}>{itemCount}</span>
             )}
-          </button>
+          </Link>
 
           {/* GET IN TOUCH style CTA — white pill, black border, hard shadow */}
           <WalletButton />
@@ -152,9 +151,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Cart Drawer */}
-      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 }
